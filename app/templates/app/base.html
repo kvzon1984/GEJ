@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
+
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'app/css/index.css' %}">
+</head>
+<body>
+    <header id="header">
+        <img src="{% static 'app/img/menuburger.png' %}" alt="menu" class="menu" id="menu">
+        <div class="contenedor-logo">
+            <img src="{% static 'app/img/Logo.jpg' %}" alt="" class="logo">
+        </div>
+        <div>
+            <nav id="nav">
+                <ul>
+                    <li>
+                        <a href="index.html">Inicio</a>
+                    </li>
+                    <li>
+                        <a href="galeria.html">Galeria</a>
+                    </li>
+                    <li>
+                        <a href="">Petición Oración</a>
+                    </li>
+                    <li>
+                        <a href="">Predicaciones</a>
+                    </li>
+                    <li>
+                        <a href="">Devocionales</a>
+                    </li>
+                    <li>
+                        <a href="contacto.html">Contacto</a>
+                    </li>
+                    <li>
+                        <a href="">Registrate</a>
+                    </li>
+                    <li>
+                        <a href="">Inicia Sesión</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+        
+    </header>
+
+
+    
+
+    <section id="contenido">
+
+        {% block contenido %}
+        {% endblock %}
+
+    </section>
+
+    <footer>
+        <div>
+            <H1>GEJ</H1>
+            <h3>Manuel Rodriguez 0369, Puente Alto</h3>
+            <h3>+56986213882</h3>
+            <ul>
+                <li><a href=""><img src="{% static 'app/img/Redes Sociales/facebook.png' %}" alt=""></a></li>
+                <li><a href=""><img src="{% static 'app/img/Redes Sociales/instagram.png' %}" alt=""></a></li>
+                <li><a href=""><img src="{% static 'app/img/Redes Sociales/twitter.png' %}" alt=""></a></li>
+                <li><a href=""><img src="{% static 'app/img/Redes Sociales/youtube.png' %}" alt=""></a></li>
+            </ul>
+         </div>  
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.min.js"></script>
+
+    <script>
+        $(document).ready(function(){
+            $('.slider').bxSlider({
+                auto: true,
+                mode: 'fade'
+            });
+        });
+    </script>
+
+    <script src="js/menu.js"></script>
+
+    
+</body>
+</html>
