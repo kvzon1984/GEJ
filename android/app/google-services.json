@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "323372141270",
+    "project_id": "gejv1-83264",
+    "storage_bucket": "gejv1-83264.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323372141270:android:2eb770e88567b1b25dd777",
+        "android_client_info": {
+          "package_name": "com.example.gej_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVqiOm7wgQph1ETIDE8YLszFpqKqolYWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:323372141270:android:ebb38b9daad0b5eb5dd777",
+        "android_client_info": {
+          "package_name": "com.gej.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVqiOm7wgQph1ETIDE8YLszFpqKqolYWU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
