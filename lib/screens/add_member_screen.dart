@@ -16,6 +16,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   final _emailController = TextEditingController();
   final _phoneController = TextEditingController();
   final _addressController = TextEditingController();
+  final _ageController = TextEditingController();
   final _prayerRequestController = TextEditingController();
   final _observationsController = TextEditingController();
   final _comunaController = TextEditingController();
@@ -148,6 +149,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
           email: _emailController.text.trim(),
           phone: _phoneController.text.trim(),
           address: _addressController.text.trim(),
+          age: int.parse(_ageController.text.trim()),
           isNew: _isNew,
           region: _selectedRegion,
           comuna: finalComuna,
@@ -256,6 +258,29 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Por favor ingrese el teléfono';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Campo: Edad
+                    TextFormField(
+                      controller: _ageController,
+                      decoration: const InputDecoration(
+                        labelText: 'Edad',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.calendar_today),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Por favor ingrese la edad';
+                        }
+                        final age = int.tryParse(value.trim());
+                        if (age == null || age < 0 || age > 120) {
+                          return 'Ingrese una edad válida (0-120)';
                         }
                         return null;
                       },

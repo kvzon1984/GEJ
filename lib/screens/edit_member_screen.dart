@@ -22,6 +22,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
   late final TextEditingController _emailController;
   late final TextEditingController _phoneController;
   late final TextEditingController _addressController;
+  late final TextEditingController _ageController;
   late final TextEditingController _prayerRequestController;
   late final TextEditingController _observationsController;
   late final TextEditingController _comunaController;
@@ -103,6 +104,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
     _emailController = TextEditingController(text: widget.member.email);
     _phoneController = TextEditingController(text: widget.member.phone);
     _addressController = TextEditingController(text: widget.member.address);
+    _ageController = TextEditingController(text: widget.member.age.toString());
     _prayerRequestController =
         TextEditingController(text: widget.member.prayerRequest);
     _observationsController =
@@ -139,6 +141,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
     _emailController.dispose();
     _phoneController.dispose();
     _addressController.dispose();
+    _ageController.dispose();
     _prayerRequestController.dispose();
     _observationsController.dispose();
     _comunaController.dispose();
@@ -168,6 +171,7 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
           email: _emailController.text.trim(),
           phone: _phoneController.text.trim(),
           address: _addressController.text.trim(),
+          age: int.parse(_ageController.text.trim()),
           isNew: _isNew,
           region: _selectedRegion,
           comuna: finalComuna,
@@ -277,6 +281,29 @@ class _EditMemberScreenState extends State<EditMemberScreen> {
                       validator: (value) {
                         if (value == null || value.trim().isEmpty) {
                           return 'Por favor ingrese el teléfono';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    const SizedBox(height: 16),
+
+                    // Campo: Edad
+                    TextFormField(
+                      controller: _ageController,
+                      decoration: const InputDecoration(
+                        labelText: 'Edad',
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.calendar_today),
+                      ),
+                      keyboardType: TextInputType.number,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Por favor ingrese la edad';
+                        }
+                        final age = int.tryParse(value.trim());
+                        if (age == null || age < 0 || age > 150) {
+                          return 'Ingrese una edad válida (0-150)';
                         }
                         return null;
                       },

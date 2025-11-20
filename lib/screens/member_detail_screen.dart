@@ -153,6 +153,7 @@ class MemberDetailScreen extends StatelessWidget {
                 _buildInfoRow(Icons.email, 'Email',
                     member.email.isEmpty ? 'No especificado' : member.email),
                 _buildInfoRow(Icons.phone, 'Teléfono', member.phone),
+                _buildInfoRow(Icons.cake, 'Edad', '${member.age} años'),
                 _buildInfoRow(Icons.home, 'Dirección', member.address),
               ],
             ),

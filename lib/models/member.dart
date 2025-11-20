@@ -6,6 +6,7 @@ class Member {
   final String email;
   final String phone;
   final String address;
+  final int age;
   final bool isNew;
   final String region;
   final String comuna;
@@ -20,6 +21,7 @@ class Member {
     required this.email,
     required this.phone,
     required this.address,
+    required this.age,
     required this.isNew,
     required this.region,
     required this.comuna,
@@ -45,6 +47,7 @@ class Member {
       email: data['email'] ?? '',
       phone: data['phone'] ?? '',
       address: data['address'] ?? '',
+      age: data['age'] ?? 0,
       isNew: data['isNew'] ?? false,
       region: data['region'] ?? '',
       comuna: data['comuna'] ?? '',
@@ -61,6 +64,7 @@ class Member {
       'email': email,
       'phone': phone,
       'address': address,
+      'age': age,
       'isNew': isNew,
       'region': region,
       'comuna': comuna,
