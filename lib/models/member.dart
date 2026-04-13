@@ -12,6 +12,8 @@ class Member {
   final String comuna;
   final String prayerRequest;
   final String observations;
+  final String createdByUid;
+  final String createdByEmail;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -27,6 +29,8 @@ class Member {
     required this.comuna,
     required this.prayerRequest,
     required this.observations,
+    required this.createdByUid,
+    required this.createdByEmail,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -53,6 +57,8 @@ class Member {
       comuna: data['comuna'] ?? '',
       prayerRequest: data['prayerRequest'] ?? '',
       observations: data['observations'] ?? '',
+      createdByUid: data['createdByUid'] ?? '',
+      createdByEmail: data['createdByEmail'] ?? '',
       createdAt: parseTimestamp(data['createdAt']),
       updatedAt: parseTimestamp(data['updatedAt']),
     );
@@ -70,6 +76,8 @@ class Member {
       'comuna': comuna,
       'prayerRequest': prayerRequest,
       'observations': observations,
+      'createdByUid': createdByUid,
+      'createdByEmail': createdByEmail,
       'createdAt': createdAt,
       'updatedAt': updatedAt,
     };

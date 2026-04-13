@@ -238,6 +238,22 @@ class AllMembersScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
+                              const SizedBox(height: 4),
+                              Row(
+                                children: [
+                                  const Icon(Icons.person_outline,
+                                      size: 16, color: Colors.grey),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      member.createdByEmail.isEmpty
+                                          ? 'Usuario no registrado'
+                                          : member.createdByEmail,
+                                      style: const TextStyle(fontSize: 13),
+                                    ),
+                                  ),
+                                ],
+                              ),
                               if (member.isNew) ...[
                                 const SizedBox(height: 4),
                                 Row(

@@ -16,6 +16,8 @@ class FirestoreService {
     required String comuna,
     required String prayerRequest,
     required String observations,
+    required String createdByUid,
+    required String createdByEmail,
   }) async {
     try {
       await _db.collection('cities').doc(cityName).collection('members').add({
@@ -29,6 +31,8 @@ class FirestoreService {
         'comuna': comuna,
         'prayerRequest': prayerRequest,
         'observations': observations,
+        'createdByUid': createdByUid,
+        'createdByEmail': createdByEmail,
         'createdAt': FieldValue.serverTimestamp(),
       });
     } catch (e) {

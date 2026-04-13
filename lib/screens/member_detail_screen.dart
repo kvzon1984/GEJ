@@ -210,6 +210,12 @@ class MemberDetailScreen extends StatelessWidget {
               title: 'Información del Sistema',
               icon: Icons.info_outline,
               children: [
+                _buildInfoRow(
+                    Icons.person_outline,
+                    'Agregado por',
+                    member.createdByEmail.isEmpty
+                        ? 'Usuario no registrado'
+                        : member.createdByEmail),
                 _buildInfoRow(Icons.calendar_today, 'Fecha de creación',
                     _formatDate(member.createdAt)),
                 _buildInfoRow(Icons.update, 'Última actualización',

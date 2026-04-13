@@ -1,17 +1,162 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:excel/excel.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'dart:io';
+import '../models/member.dart';
 import 'add_member_screen.dart';
 import 'list_members_screen.dart';
 
-class CityMenuScreen extends StatelessWidget {
+class CityMenuScreen extends StatefulWidget {
   final String cityName;
 
   const CityMenuScreen({super.key, required this.cityName});
 
   @override
+  State<CityMenuScreen> createState() => _CityMenuScreenState();
+}
+
+class _CityMenuScreenState extends State<CityMenuScreen> {
+  bool _isExporting = false;
+
+  Future<void> _exportToExcel() async {
+    setState(() => _isExporting = true);
+
+    try {
+      // Solicitar permisos para Android 13+
+      if (Platform.isAndroid) {
+        if (await Permission.manageExternalStorage.isDenied) {
+          await Permission.manageExternalStorage.request();
+        }
+      }
+
+      // Obtener miembros de Firestore
+      final snapshot = await FirebaseFirestore.instance
+          .collection('cities')
+          .doc(widget.cityName)
+          .collection('members')
+          .orderBy('createdAt', descending: true)
+          .get();
+
+      if (snapshot.docs.isEmpty) {
+        throw 'No hay miembros para exportar';
+      }
+
+      final members =
+          snapshot.docs.map((doc) => Member.fromFirestore(doc)).toList();
+
+      // Crear archivo Excel
+      var excel = Excel.createExcel();
+      Sheet sheetObject = excel['Miembros ${widget.cityName}'];
+      excel.delete('Sheet1'); // Eliminar hoja por defecto
+
+      // Agregar encabezados
+      List<String> headers = [
+        'Nombre',
+        'Agregado Por',
+        'Email',
+        'Teléfono',
+        'Edad',
+        'Dirección',
+        '¿Es Nuevo?',
+        'Región',
+        'Comuna',
+        'Petición de Oración',
+        'Observaciones',
+        'Fecha de Creación',
+        'Última Actualización',
+      ];
+
+      for (var i = 0; i < headers.length; i++) {
+        sheetObject
+            .cell(CellIndex.indexByColumnRow(columnIndex: i, rowIndex: 0))
+            .value = TextCellValue(headers[i]);
+      }
+
+      // Agregar datos
+      for (var i = 0; i < members.length; i++) {
+        final member = members[i];
+        final rowIndex = i + 1;
+
+        List<String> rowData = [
+          member.name,
+          member.createdByEmail.isEmpty
+              ? 'Usuario no registrado'
+              : member.createdByEmail,
+          member.email.isEmpty ? 'No especificado' : member.email,
+          member.phone,
+          member.age.toString(),
+          member.address,
+          member.isNew ? 'Sí' : 'No',
+          member.region,
+          member.comuna,
+          member.prayerRequest.isEmpty ? '-' : member.prayerRequest,
+          member.observations.isEmpty ? '-' : member.observations,
+          '${member.createdAt.day}/${member.createdAt.month}/${member.createdAt.year}',
+          '${member.updatedAt.day}/${member.updatedAt.month}/${member.updatedAt.year}',
+        ];
+
+        for (var j = 0; j < rowData.length; j++) {
+          sheetObject
+              .cell(CellIndex.indexByColumnRow(
+                  columnIndex: j, rowIndex: rowIndex))
+              .value = TextCellValue(rowData[j]);
+        }
+      }
+
+      // Guardar archivo
+      Directory? directory;
+      if (Platform.isAndroid) {
+        directory = Directory('/storage/emulated/0/Download');
+        if (!await directory.exists()) {
+          directory = await getExternalStorageDirectory();
+        }
+      } else {
+        directory = await getApplicationDocumentsDirectory();
+      }
+
+      final fileName =
+          'Miembros_${widget.cityName}_${DateTime.now().millisecondsSinceEpoch}.xlsx';
+      final filePath = '${directory!.path}/$fileName';
+      final fileBytes = excel.save();
+      File(filePath)
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(fileBytes!);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Excel guardado en: $filePath'),
+            duration: const Duration(seconds: 5),
+            action: SnackBarAction(
+              label: 'OK',
+              onPressed: () {},
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error al exportar: ${e.toString()}'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isExporting = false);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(cityName),
+        title: Text(widget.cityName),
         backgroundColor: Colors.deepPurple.shade700,
         foregroundColor: Colors.white,
       ),
@@ -55,7 +200,7 @@ class CityMenuScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            AddMemberScreen(cityName: cityName),
+                            AddMemberScreen(cityName: widget.cityName),
                       ),
                     );
                   },
@@ -70,10 +215,19 @@ class CityMenuScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            ListMembersScreen(cityName: cityName),
+                            ListMembersScreen(cityName: widget.cityName),
                       ),
                     );
                   },
+                ),
+                const SizedBox(height: 24),
+                _MenuButton(
+                  icon: _isExporting
+                      ? Icons.hourglass_empty
+                      : Icons.file_download,
+                  label: _isExporting ? 'Exportando...' : 'Exportar a Excel',
+                  color: Colors.orange,
+                  onPressed: _isExporting ? () {} : _exportToExcel,
                 ),
               ],
             ),

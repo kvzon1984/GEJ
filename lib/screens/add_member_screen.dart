@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../services/firestore_service.dart';
+import '../services/auth_service.dart';
 
 class AddMemberScreen extends StatefulWidget {
   final String cityName;
@@ -22,6 +23,7 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
   final _comunaController = TextEditingController();
 
   final FirestoreService _firestoreService = FirestoreService();
+  final AuthService _authService = AuthService();
 
   bool _isLoading = false;
   bool _isNew = false;
@@ -155,6 +157,9 @@ class _AddMemberScreenState extends State<AddMemberScreen> {
           comuna: finalComuna,
           prayerRequest: _prayerRequestController.text.trim(),
           observations: _observationsController.text.trim(),
+          createdByUid: _authService.currentUser?.uid ?? 'desconocido',
+          createdByEmail:
+              _authService.currentUser?.email ?? 'usuario_no_identificado',
         );
 
         if (mounted) {
